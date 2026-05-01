@@ -18,6 +18,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // Support both /ws and /ws-kitchen for maximum compatibility
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
+
         registry.addEndpoint("/ws-kitchen")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
