@@ -40,6 +40,12 @@ public class CustomerOrder {
     @Enumerated(EnumType.STRING)
     private PaymentProvider paymentProvider;
 
+    // Delivery fields
+    private String orderType;       // DINE_IN or DELIVERY
+    @Column(length = 500)
+    private String deliveryAddress;
+    private String scheduleTime;    // now, 30min, 1hr, 2hr, custom time
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

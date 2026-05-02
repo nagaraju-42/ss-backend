@@ -69,6 +69,11 @@ public class OrderService {
         order.setTokenNumber("#" + UUID.randomUUID().toString().substring(0, 4).toUpperCase());
         order.setPaymentProvider(provider);
 
+        // Delivery fields
+        order.setOrderType(request.getOrderType() != null ? request.getOrderType() : "DINE_IN");
+        order.setDeliveryAddress(clean(request.getDeliveryAddress()));
+        order.setScheduleTime(request.getScheduleTime() != null ? request.getScheduleTime() : "now");
+
         populateItemsAndTotal(order, request.getItems());
 
         if (provider == PaymentProvider.CASH) {
