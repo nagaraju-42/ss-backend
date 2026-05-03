@@ -60,6 +60,11 @@ public class OrderController {
         return ResponseEntity.ok(orderService.updateStatus(id, status));
     }
 
+    @PostMapping("/{id}/pay-cash")
+    public ResponseEntity<CustomerOrder> markAsPaid(@PathVariable Long id) {
+        return ResponseEntity.ok(orderService.markAsPaid(id));
+    }
+
     @DeleteMapping("/clear-test")
     public ResponseEntity<Void> clearTestOrders() {
         orderRepository.deleteAll();

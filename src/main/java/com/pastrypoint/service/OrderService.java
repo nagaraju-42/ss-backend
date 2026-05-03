@@ -97,6 +97,20 @@ public class OrderService {
     }
 
     @Transactional
+    public CustomerOrder markAsPaid(Long id) {
+        CustomerOrder order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
+        if (order.getPaymentStatus() != PaymentStatus.PENDING_CASH) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order is not pending cash payment");
+        }
+        order.setPaymentStatus(PaymentStatus.PAID_CASH);
+        order.setUpdatedAt(LocalDateTime.now());
+        CustomerOrder savedOrder = orderRepository.save(order);
+        messagingTemplate.convertAndSend("/topic/orders", savedOrder);
+        return savedOrder;
+    }
+
+    @Transactional
     public CustomerOrder verifyPayment(String razorpayOrderId, String razorpayPaymentId, String razorpaySignature) throws Exception {
         if (razorpayOrderId == null || razorpayPaymentId == null || razorpaySignature == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing Razorpay verification fields");
